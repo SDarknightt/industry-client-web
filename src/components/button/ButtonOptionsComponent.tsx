@@ -1,10 +1,12 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import OptionsSvg  from '../../assets/menu-svgrepo.svg?react';
+import type { ReactNode } from "react";
 
-export default function ButtonOptions({ title, buttons }: { title: string; buttons: { title: string; onClick: () => void }[]; }) {
+export default function ButtonOptions({ title, buttons }: { title?: string; buttons: { title: string; icon?: ReactNode; onClick: () => void }[]; }) {
     return (
         <Menu>
             <MenuButton className="inline-flex items-center gap-2 rounded-md bg-gray-800 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-gray-700 data-open:bg-gray-700">
-                {title}
+                {title ?? <OptionsSvg className="h-6 text-white"/>}
             </MenuButton>
 
             <MenuItems
