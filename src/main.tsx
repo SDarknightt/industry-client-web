@@ -10,16 +10,15 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <div className="flex flex-col min-h-screen min-w-screen">
-        <div className="flex flex-row justify-between items-center px-3 bg-primary min-h-12.5 max-h-17.5">
+        <header className="flex flex-row justify-between items-center px-3 bg-primary min-h-12.5 max-h-17.5">
           <div>
             Menu
           </div>
           <div>
             Logo
           </div>
-        </div>
-
-        <div className="flex flex-auto flex-col bg-white">
+        </header>
+        <div className="flex flex-auto flex-col bg-white text-gray-600 p-3">
           <AppRoutes />
         </div>
       </div>
