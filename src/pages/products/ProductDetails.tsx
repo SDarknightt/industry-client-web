@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { getProductById } from "../../service/product-service";
-import { Button } from "@headlessui/react";
+import BackButton from '../../components/button/BackButtonComponent';
 
 export default function ProductDetails() {
     const { id } = useParams();
@@ -23,9 +23,7 @@ export default function ProductDetails() {
 
     return (
         <div className="flex flex-col w-full gap-y-6">
-            <p className="text-2xl font-bold text-gray-800">
-                Detalhes do Produto
-            </p>
+            <BackButton title={product?.name ?? "Detalhes do Produto"} redirectTo={"/produtos"}/>
 
             <div className="flex flex-col gap-y-4 border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
                 <div>
@@ -51,15 +49,15 @@ export default function ProductDetails() {
                 {product.rawMaterials?.length > 0 ? (
                     <div className="overflow-x-auto border border-gray-200 rounded-lg">
                         <table className="w-full text-left table-auto">
-                            <thead className="bg-gray-50">
+                            <thead className="bg-primary text-white uppercase">
                                 <tr>
-                                    <th className="p-4 border-b border-gray-200">
-                                        <p className="text-sm font-semibold text-gray-700">
+                                    <th className="p-4 border-b">
+                                        <p className="text-sm font-semibold ">
                                             Nome
                                         </p>
                                     </th>
                                     <th className="p-4 border-b border-gray-200">
-                                        <p className="text-sm font-semibold text-gray-700">
+                                        <p className="text-sm font-semibold">
                                             Quantidade Utilizada
                                         </p>
                                     </th>
@@ -80,29 +78,12 @@ export default function ProductDetails() {
                         </table>
                     </div>
                 ) : (
-                    <p className="text-sm text-gray-500">
-                        Este produto não possui matérias-primas vinculadas.
-                    </p>
+                    <div className="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                        <p className="text-sm text-gray-500">
+                            Este produto não possui matérias-primas vinculadas.
+                        </p>
+                    </div>
                 )}
-            </div>
-
-            {/* Botões */}
-            <div className="flex gap-3 mt-4">
-                <Button
-                    type="button"
-                    onClick={() => navigate(-1)}
-                    className="inline-flex items-center gap-2 rounded-md bg-gray-500 px-3 py-1.5 text-sm font-semibold text-white shadow-inner shadow-white/10 hover:bg-gray-600"
-                >
-                    Voltar
-                </Button>
-
-                <Button
-                    type="button"
-                    onClick={() => navigate(`/produtos/${product.id}/editar`)}
-                    className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white shadow-inner shadow-white/10 hover:bg-blue-700"
-                >
-                    Editar
-                </Button>
             </div>
         </div>
     );
