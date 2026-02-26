@@ -15,6 +15,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@theme {
+  --color-primary: #4A7C44;
+  --color-light-green: #3D6638;
+  --color-graphite: #2D332D;
+}
+
 header {
   color: white;
 }
