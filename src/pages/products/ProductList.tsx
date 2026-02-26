@@ -23,11 +23,16 @@ export default function ListProduct() {
     });
 
     return (
-        <div className="flex flex-col w-full gap-y-3">
+        <div className="flex flex-col w-full gap-y-3 h-auto">
             <BackButton title={"Listar Produtos"} redirectTo={"/"}/>
 
             <div className="flex flex-row justify-end">
-                <Button className="text-white" onClick={() => navigate(`/produtos/novo`)}>+ Cadastrar</Button>
+                <Button 
+                    className="flex flex-row items-center justify-center text-center gap-x-2 font-bold w-full max-w-50 bg-primary text-white hover:brightness-90" 
+                    onClick={() => navigate("/produtos/novo")}
+                >
+                    <span className="text-xl">+</span> Cadastrar
+                </Button>
             </div>
 
             <div className="overflow-x-auto border border-light-green rounded-lg">
@@ -62,7 +67,6 @@ export default function ListProduct() {
                                 </td>
                                 <td className="p-4 text-sm text-gray-900" onClick={(e) => e.stopPropagation()}>
                                      <ButtonOptions   
-                                        title="Opções"
                                         buttons={[
                                             {
                                                 title: "Editar",
