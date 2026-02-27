@@ -4,6 +4,9 @@ import ProductList from '../pages/products/ProductList'
 import ProductCreate from '../pages/products/ProductCreate'
 import ProductDetails from '../pages/products/ProductDetails'
 import ProductUpdate from '../pages/products/ProductUpdate'
+import RawMaterialList from '../pages/raw-materials/RawMaterialList'
+import RawMaterialCreate from '../pages/raw-materials/RawMaterialCreate'
+import RawMaterialUpdate from '../pages/raw-materials/RawMaterialUpdate'
 
 export function AppRoutes() {
   return (
@@ -14,6 +17,9 @@ export function AppRoutes() {
         <Route path="/produtos/novo" element={<ProductCreate />} />
         <Route path="/produtos/:id" element={<ProductDetails />} />
         <Route path="/produtos/:id/editar" element={<ProductUpdate />} />
+        <Route path="/materias-primas" element={<RawMaterialList />} />
+        <Route path="/materias-primas/novo" element={<RawMaterialCreate />} />
+        <Route path="/materias-primas/:id/editar" element={<RawMaterialUpdate />} />
       </Routes>
     </BrowserRouter>
   )
