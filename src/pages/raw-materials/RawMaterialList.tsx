@@ -57,14 +57,14 @@ export default function RawMaterialList() {
                     </thead>
                     <tbody className="divide-gray-100 text-graphite">
                         {(materials ?? []).map((m, index: number) => (
-                            <tr key={m.id || index} className="hover:bg-gray-50 border-y-2 border-[#E9ECE9]">
+                            <tr key={m.id || index} className="hover:bg-gray-50 border-y-2 border-[#E9ECE9]" onClick={() => navigate(`/materias-primas/${m.id}`)}>
                                 <td className="p-4 text-sm text-gray-900">
                                     {m?.name ?? "-"}
                                 </td>
                                 <td className="p-4 text-sm text-gray-900">
                                     {m?.stockQuantity ?? "-"}
                                 </td>
-                                <td className="p-4 text-sm text-gray-900">
+                                <td className="p-4 text-sm text-gray-900" onClick={(e) => e.stopPropagation()}>
                                     <ButtonOptions   
                                         buttons={[
                                             {
