@@ -7,11 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { createProductRawMaterialRelationship, deleteProductRawMaterialRelationship, updateProductRawMaterialRelationship } from "../../service/product-raw-material-service";
 import BackButton from "../../components/button/BackButtonComponent";
-
-type ProductUpdate = {
-    name: string;
-    price: string;
-};
+import type { ProductUpdateType } from "../../types/ProductTypes";
 
 export default function ProductUpdate() {
     const navigate = useNavigate();
@@ -28,7 +24,7 @@ export default function ProductUpdate() {
         formState: {
             errors
         }
-    } = useForm<ProductUpdate>({
+    } = useForm<ProductUpdateType>({
         defaultValues: {
             name: "",
             price: ""
@@ -86,13 +82,14 @@ export default function ProductUpdate() {
     useEffect(() => {
         if (product) {
             reset({
-            name: product?.name,
-            price: product?.price
-        });
+                id: product?.id,
+                name: product?.name,
+                price: product?.price?.toString()
+            });
         }
     }, [product]);
 
-    const onSubmit = (values: ProductUpdate) => update({id, ...values});
+    const onSubmit = (values: ProductUpdateType) => update(values);
 
     const saveFormulation = (data: { productId: number; materialId: number; materialQuantity: number; }) => {
         createRelationship({ productId: data?.productId, materialId: data?.materialId, materialQuantity: data.materialQuantity })
@@ -106,9 +103,9 @@ export default function ProductUpdate() {
         updateRelationship({ productId: Number(id), materialId, materialQuantity: quantity });
     };
 
-    const linkedMaterialIds = new Set((product?.rawMaterials ?? []).map((rm: any) => rm.id));
+    const linkedMaterialIds = new Set((product?.rawMaterials ?? []).map((rm) => rm.id));
     const availableMaterials = (rawMaterials ?? []).filter(
-        (rm: any) => !linkedMaterialIds.has(rm.id) && 
+        (rm) => !linkedMaterialIds.has(rm.id) && 
         rm.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -158,7 +155,7 @@ export default function ProductUpdate() {
 
                             {(product?.rawMaterials ?? []).length > 0 ? (
                                 <div className="flex flex-col gap-y-2">
-                                    {product.rawMaterials.map((rm: any) => (
+                                    {product?.rawMaterials.map((rm) => (
                                         <div 
                                             key={rm.id}
                                             className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-colors"
@@ -207,7 +204,7 @@ export default function ProductUpdate() {
                                             <button 
                                                 type="button" 
                                                 className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                                                onClick={() => removeFormulation({ productId: product?.id, materialId: rm.id })}
+                                                onClick={() => product?.id && removeFormulation({ productId: product.id, materialId: rm.id })}
                                                 title="Remover"
                                             >
                                                 <p className="text-xl">
@@ -242,7 +239,7 @@ export default function ProductUpdate() {
                             {availableMaterials.length > 0 && (
                                 <>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                                        {availableMaterials.map((rm: any) => (
+                                        {availableMaterials.map((rm) => (
                                             <div 
                                                 key={rm.id} 
                                                 className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all"
@@ -256,8 +253,8 @@ export default function ProductUpdate() {
                                                     className="ml-2 px-3 py-1.5 text-xs font-medium text-primary border-primary rounded-md border-2 ring-2 hover:bg-primary hover:text-white transition-colors"
                                                     onClick={() => {
                                                         const quantity = prompt(`Informe a quantidade de "${rm.name}" para este produto:`);
-                                                        if (quantity && Number(quantity) > 0) {
-                                                            saveFormulation({ productId: product?.id, materialId: rm.id, materialQuantity: Number(quantity) });
+                                                        if (quantity && Number(quantity) > 0 && product?.id && rm?.id) {
+                                                            saveFormulation({ productId: product.id, materialId: rm.id, materialQuantity: Number(quantity) });
                                                         }
                                                     }}
                                                 >

@@ -6,18 +6,7 @@ import { getRawMaterials } from "../../service/raw-material-service";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import BackButton from "../../components/button/BackButtonComponent";
-
-type ProductCreate = {
-    name: string;
-    price: string;
-    rawMaterials?: RawMaterialQuantity[];
-};
-
-type RawMaterialQuantity = {
-    id: number;
-    quantity: number;
-    name: string;
-};
+import type { ProductCreateType, RawMaterialQuantity } from "../../types/ProductTypes";
 
 export default function CreateProduct() {
     const navigate = useNavigate();
@@ -31,7 +20,7 @@ export default function CreateProduct() {
         formState: {
             errors
         }
-    } = useForm<ProductCreate>({
+    } = useForm<ProductCreateType>({
         defaultValues: {
             name: "",
             price: "",
@@ -71,7 +60,7 @@ export default function CreateProduct() {
         append({ id: data?.id, name: data?.name, quantity: data?.quantity });
     };
 
-    const onSubmit = (values: ProductCreate) => create(values);
+    const onSubmit = (values: ProductCreateType) => create(values);
 
     return (
         <div className="flex flex-col w-full gap-y-3">

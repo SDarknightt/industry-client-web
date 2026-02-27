@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getProductById } from "../../service/product-service";
 import BackButton from '../../components/button/BackButtonComponent';
 
 export default function ProductDetails() {
     const { id } = useParams();
-    const navigate = useNavigate();
 
     const { data: product, isLoading } = useQuery({
         queryKey: ["getProductById", id],
@@ -64,7 +63,7 @@ export default function ProductDetails() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {product.rawMaterials.map((rm: any, index: number) => (
+                                {product.rawMaterials.map((rm, index: number) => (
                                     <tr key={rm.id || index} className="hover:bg-gray-50">
                                         <td className="p-4 text-sm text-gray-900">
                                             {rm?.name ?? "-"}
