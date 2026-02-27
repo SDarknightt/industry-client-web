@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import BackButton from "../../components/button/BackButtonComponent";
 import type { RawMaterialUpdateType } from "../../types/RawMaterialTypes";
+import { toast } from "react-toastify";
 
 export default function RawMaterialUpdate() {
     const navigate = useNavigate();
@@ -37,7 +38,9 @@ export default function RawMaterialUpdate() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["getRawMaterials"] });
             navigate("/materias-primas");
-            alert("Matéria-prima editada com sucesso!");
+            toast.success("Matéria-prima editada com sucesso!");
+        }, onError: () => {
+            toast.error("Erro ao editar a matéria-prima!");
         }
     });
 

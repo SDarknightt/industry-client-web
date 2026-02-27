@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { createProductRawMaterialRelationship, deleteProductRawMaterialRelationship, updateProductRawMaterialRelationship } from "../../service/product-raw-material-service";
 import BackButton from "../../components/button/BackButtonComponent";
 import type { ProductUpdateType } from "../../types/ProductTypes";
+import { toast } from "react-toastify";
 
 export default function ProductUpdate() {
     const navigate = useNavigate();
@@ -48,7 +49,10 @@ export default function ProductUpdate() {
             // Invalidate cache to fetch again
             queryClient.invalidateQueries({ queryKey: ["getProducts"] });
             navigate("/produtos");
-            alert("Produto editado com sucesso!");
+            toast.success("Produto editado com sucesso!");
+        },
+        onError: () => {
+            toast.error("Erro ao editar o produto!");
         }
     });
 
@@ -58,7 +62,10 @@ export default function ProductUpdate() {
             // Invalidate cache to fetch again
             queryClient.invalidateQueries({ queryKey: ["getRawMaterials"] });
             refetchProduct();
-            alert("Matéria-prima adicionada com sucesso!");
+            toast.success("Matéria-prima adicionada com sucesso!");
+        },
+        onError: () => {
+            toast.error("Erro ao adicionar a matéria-prima!");
         }
     });
 
@@ -66,7 +73,10 @@ export default function ProductUpdate() {
             mutationFn: deleteProductRawMaterialRelationship,
             onSuccess: () => {
                 refetchProduct();
-                alert("Matéria prima removida com sucesso!");
+                toast.success("Matéria-prima removida com sucesso!");
+            },
+            onError: () => {
+                toast.error("Erro ao remover a matéria-prima!");
             }
         });
 
@@ -75,7 +85,10 @@ export default function ProductUpdate() {
         onSuccess: () => {
             refetchProduct();
             setEditingQuantity(null);
-            alert("Quantidade atualizada com sucesso!");
+            toast.success("Quantidade atualizada com sucesso!");
+        },
+        onError: () => {
+            toast.error("Erro ao atualizar a quantidade!");
         }
     });
 

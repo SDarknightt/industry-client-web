@@ -5,6 +5,7 @@ import { Fieldset, Field, Label, Input, Button } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/button/BackButtonComponent";
 import type { RawMaterialCreateType } from "../../types/RawMaterialTypes";
+import { toast } from "react-toastify";
 
 export default function RawMaterialCreate() {
     const navigate = useNavigate();
@@ -28,7 +29,10 @@ export default function RawMaterialCreate() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["getRawMaterials"] });
             navigate("/materias-primas");
-            alert("Matéria-prima criada com sucesso!");
+            toast.success("Matéria-prima criada com sucesso!");
+        },
+        onError: () => {
+            toast.error("Erro ao criar a matéria-prima!");
         }
     });
 

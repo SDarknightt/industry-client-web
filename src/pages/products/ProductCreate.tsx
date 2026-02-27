@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import BackButton from "../../components/button/BackButtonComponent";
 import type { ProductCreateType, RawMaterialQuantity } from "../../types/ProductTypes";
+import { toast } from "react-toastify";
 
 export default function CreateProduct() {
     const navigate = useNavigate();
@@ -51,7 +52,10 @@ export default function CreateProduct() {
             // Invalidate cache to fetch again
             queryClient.invalidateQueries({ queryKey: ["getProducts"] });
             navigate("/produtos");
-            alert("Produto criado com sucesso!");
+            toast.success('Produto criado com sucesso!');
+        },
+        onError: () => {
+            toast.error("Erro ao criar o produto!");
         }
     });
 

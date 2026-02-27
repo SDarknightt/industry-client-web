@@ -5,6 +5,7 @@ import ButtonOptions from "../../components/button/ButtonOptionsComponent";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/button/BackButtonComponent";
 import { TableComponent } from "../../components/table/TableComponent";
+import { toast } from "react-toastify";
 
 export default function ListProduct() {
 
@@ -19,7 +20,10 @@ export default function ListProduct() {
         mutationFn: deleteProduct,
         onSuccess: () => {
             refetch();
-            alert("Produto deletado com sucesso!");
+            toast.success("Produto deletado com sucesso!");
+        },
+        onError: () => {
+            toast.error("Erro ao deletar o produto!");
         }
     });
 

@@ -5,6 +5,7 @@ import ButtonOptions from "../../components/button/ButtonOptionsComponent";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/button/BackButtonComponent";
 import { TableComponent } from "../../components/table/TableComponent";
+import { toast } from "react-toastify";
 
 export default function RawMaterialList() {
     const navigate = useNavigate();
@@ -18,7 +19,10 @@ export default function RawMaterialList() {
         mutationFn: deleteRawMaterial,
         onSuccess: () => {
             refetch();
-            alert("Matéria-prima deletada com sucesso!");
+            toast.success("Matéria-prima deletada com sucesso!");
+        },
+        onError: () => {
+            toast.error("Erro ao deletar a matéria-prima!");
         }
     });
 
