@@ -23,7 +23,7 @@ export default function RawMaterialList() {
 
     return (
         <div className="flex flex-col w-full gap-y-3 h-auto">
-            <BackButton title={"Listar Matérias Primas"} redirectTo={"/"} />
+            <BackButton title={"Listar Matérias-Primas"} redirectTo={"/"} />
 
             <div className="flex flex-row justify-end">
                 <Button 
@@ -55,7 +55,7 @@ export default function RawMaterialList() {
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100 text-graphite">
+                    <tbody className="divide-gray-100 text-graphite">
                         {(materials ?? []).map((m, index: number) => (
                             <tr key={m.id || index} className="hover:bg-gray-50 border-y-2 border-[#E9ECE9]">
                                 <td className="p-4 text-sm text-gray-900">
