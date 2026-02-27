@@ -4,6 +4,7 @@ import { Button } from "@headlessui/react";
 import ButtonOptions from "../../components/button/ButtonOptionsComponent";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/button/BackButtonComponent";
+import { TableComponent } from "../../components/table/TableComponent";
 
 export default function ListProduct() {
 
@@ -35,55 +36,38 @@ export default function ListProduct() {
                 </Button>
             </div>
 
-            <div className="overflow-x-auto border border-light-green rounded-lg">
-                <table className="w-full text-left table-auto">
-                    <thead className="bg-primary text-white uppercase">
-                        <tr>
-                            <th className="p-4 border-b">
-                                <p className="text-sm font-semibold ">
-                                    Nome
-                                </p>
-                            </th>
-                            <th className="p-4 border-b">
-                                <p className="text-sm font-semibold">
-                                    Preço
-                                </p>
-                            </th>
-                            <th className="p-4 border-b">
-                                <p className="text-sm font-semibold ">
-                                    #
-                                </p>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 text-graphite">
-                        {(products ?? []).map((p: any, index: number) => (
-                            <tr key={p.id || index} className="hover:bg-gray-50 border-y-2 border-[#E9ECE9]" onClick={() => navigate(`/produtos/${p.id}`)}>
-                                <td className="p-4 text-sm text-gray-900">
-                                    {p?.name ?? "-"}
-                                </td>
-                                <td className="p-4 text-sm text-gray-900">
-                                    R$ {p?.price ?? "-"}
-                                </td>
-                                <td className="p-4 text-sm text-gray-900" onClick={(e) => e.stopPropagation()}>
-                                     <ButtonOptions   
-                                        buttons={[
-                                            {
-                                                title: "Editar",
-                                                onClick: () => navigate(`/produtos/${p.id}/editar`)
-                                            },
-                                            {
-                                                title: "Deletar",
-                                                onClick: () => remove(p?.id)    
-                                            }
-                                        ]}
-                                    />
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            <TableComponent
+                data={products ?? []}
+                onRowClick={(p) => navigate(`/produtos/${p.id}`)}
+                columns={[
+                    {
+                        header: "Nome",
+                        objectMap: "name"
+                    },
+                    {
+                        header: "Preço",
+                        objectMap: "price"
+                    },
+                    {
+                        header: "#",
+                        objectMap: "#",
+                        reactNode: (p) => (
+                            <ButtonOptions   
+                                buttons={[
+                                    {
+                                        title: "Editar",
+                                        onClick: () => navigate(`/produtos/${p.id}/editar`)
+                                    },
+                                    {
+                                        title: "Deletar",
+                                        onClick: () => remove(p?.id)    
+                                    }
+                                ]}
+                            />
+                        )
+                    },
+                ]}
+            />
         </div>
     );
 }

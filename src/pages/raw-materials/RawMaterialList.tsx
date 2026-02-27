@@ -4,6 +4,7 @@ import { Button } from "@headlessui/react";
 import ButtonOptions from "../../components/button/ButtonOptionsComponent";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/button/BackButtonComponent";
+import { TableComponent } from "../../components/table/TableComponent";
 
 export default function RawMaterialList() {
     const navigate = useNavigate();
@@ -34,55 +35,38 @@ export default function RawMaterialList() {
                 </Button>
             </div>
 
-            <div className="overflow-x-auto border border-light-green rounded-lg">
-                <table className="w-full text-left table-auto">
-                    <thead className="bg-primary text-white uppercase">
-                        <tr>
-                            <th className="p-4 border-b">
-                                <p className="text-sm font-semibold">
-                                    Nome
-                                </p>
-                            </th>
-                            <th className="p-4 border-b">
-                                <p className="text-sm font-semibold">
-                                    Quantidade em Estoque
-                                </p>
-                            </th>
-                            <th className="p-4 border-b">
-                                <p className="text-sm font-semibold">
-                                    #
-                                </p>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-gray-100 text-graphite">
-                        {(materials ?? []).map((m, index: number) => (
-                            <tr key={m.id || index} className="hover:bg-gray-50 border-y-2 border-[#E9ECE9]" onClick={() => navigate(`/materias-primas/${m.id}`)}>
-                                <td className="p-4 text-sm text-gray-900">
-                                    {m?.name ?? "-"}
-                                </td>
-                                <td className="p-4 text-sm text-gray-900">
-                                    {m?.stockQuantity ?? "-"}
-                                </td>
-                                <td className="p-4 text-sm text-gray-900" onClick={(e) => e.stopPropagation()}>
-                                    <ButtonOptions   
-                                        buttons={[
-                                            {
-                                                title: "Editar",
-                                                onClick: () => navigate(`/materias-primas/${m.id}/editar`)
-                                            },
-                                            {
-                                                title: "Deletar",
-                                                onClick: () => remove(m?.id)    
-                                            }
-                                        ]}
-                                    />
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            <TableComponent
+                data={materials ?? []}
+                onRowClick={(m) => navigate(`/materias-primas/${m.id}`)}
+                columns={[
+                    {
+                        header: "Nome",
+                        objectMap: "name"
+                    },
+                    {
+                        header: "Qtd. Estoque",
+                        objectMap: "stockQuantity",
+                    },
+                    {
+                        header: "#",
+                        objectMap: "#",
+                        reactNode: (m) => (
+                            <ButtonOptions   
+                                buttons={[
+                                    {
+                                        title: "Editar",
+                                        onClick: () => navigate(`/materias-primas/${m.id}/editar`)
+                                    },
+                                    {
+                                        title: "Deletar",
+                                        onClick: () => remove(m?.id)    
+                                    }
+                                ]}
+                            />
+                        )
+                    },
+                ]}
+            />
         </div>
     );
 }

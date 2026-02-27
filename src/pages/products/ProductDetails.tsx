@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { getProductById } from "../../service/product-service";
 import BackButton from '../../components/button/BackButtonComponent';
+import { TableComponent } from "../../components/table/TableComponent";
 
 export default function ProductDetails() {
     const { id } = useParams();
@@ -46,36 +47,19 @@ export default function ProductDetails() {
                 </h2>
 
                 {product.rawMaterials?.length > 0 ? (
-                    <div className="overflow-x-auto border border-gray-200 rounded-lg">
-                        <table className="w-full text-left table-auto">
-                            <thead className="bg-primary text-white uppercase">
-                                <tr>
-                                    <th className="p-4 border-b">
-                                        <p className="text-sm font-semibold ">
-                                            Nome
-                                        </p>
-                                    </th>
-                                    <th className="p-4 border-b border-gray-200">
-                                        <p className="text-sm font-semibold">
-                                            Quantidade Utilizada
-                                        </p>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                                {product.rawMaterials.map((rm, index: number) => (
-                                    <tr key={rm.id || index} className="hover:bg-gray-50">
-                                        <td className="p-4 text-sm text-gray-900">
-                                            {rm?.name ?? "-"}
-                                        </td>
-                                        <td className="p-4 text-sm text-gray-900">
-                                            {rm?.materialQuantity ?? 0}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <TableComponent
+                        data={product.rawMaterials ?? []}
+                        columns={[
+                            {
+                                header: "Nome",
+                                objectMap: "name"
+                            },
+                            {
+                                header: "Qtd. Utilizada",
+                                objectMap: "materialQuantity"
+                            }
+                        ]}
+                    />
                 ) : (
                     <div className="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
                         <p className="text-sm text-gray-500">

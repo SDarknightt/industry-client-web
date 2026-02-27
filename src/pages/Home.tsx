@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getProductionRecommendation } from "../service/product-service";
 import { useNavigate } from "react-router-dom";
+import { TableComponent } from "../components/table/TableComponent";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function Home() {
     
     return (
         <div className="flex flex-col w-full gap-y-6">
-            <h1 className="text-2xl font-bold text-black">Recomendações de Produção</h1>
+            <p className="text-3xl sm:text-4xl font-bold text-black">Recomendações de Produção</p>
 
             <div className="flex flex-row gap-4">
                 <button 
@@ -29,44 +30,30 @@ export default function Home() {
                 </button>
             </div>
 
-            <div className="overflow-x-auto border border-light-green rounded-lg">
-                <table className="w-full text-left table-auto">
-                    <thead className="bg-primary text-white uppercase">
-                        <tr>
-                            <th className="p-4 border-b">
-                                <p className="text-sm font-semibold">Produto</p>
-                            </th>
-                            <th className="p-4 border-b">
-                                <p className="text-sm font-semibold">Qtd. Produzível</p>
-                            </th>
-                            <th className="p-4 border-b">
-                                <p className="text-sm font-semibold">Valor Unit.</p>
-                            </th>
-                            <th className="p-4 border-b">
-                                <p className="text-sm font-semibold">Valor Total</p>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 text-graphite">
-                        {(products ?? []).map((p: any, index: number) => (
-                            <tr key={p.id || index} className="hover:bg-gray-50 border-y-2 border-[#E9ECE9]">
-                                <td className="p-4 text-sm text-gray-900">
-                                    {p?.name ?? "-"}
-                                </td>
-                                <td className="p-4 text-sm text-gray-900">
-                                    {p?.maxProductionQuantity ?? "-"}
-                                </td>
-                                <td className="p-4 text-sm text-gray-900">
-                                    R$ {p?.price?.toFixed(2) ?? "-"}
-                                </td>
-                                <td className="p-4 text-sm text-gray-900">
-                                    R$ {p?.totalPrice?.toFixed(2) ?? "-"}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            <TableComponent
+                data={products ?? []}
+                columns={[
+                    {
+                        header: "Produto",
+                        objectMap: "name"
+                    },
+                    {
+                        header: "Qtd. Produzível",
+                        objectMap: "maxProductionQuantity",
+                        reactNode: (p) => <span>{p?.maxProductionQuantity?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    },
+                    {
+                        header: "Valor Unit.",
+                        objectMap: "price",
+                        reactNode: (p) => <span>{p?.price?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    },
+                    {
+                        header: "Valor Total",
+                        objectMap: "totalPrice",
+                        reactNode: (p) => <span>{p?.totalPrice?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    },
+                ]}
+            />
         </div>
     );
 }
