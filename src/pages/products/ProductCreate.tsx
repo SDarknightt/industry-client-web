@@ -9,6 +9,7 @@ import BackButton from "../../components/button/BackButtonComponent";
 import type { ProductCreateType, RawMaterialQuantity } from "../../types/ProductTypes";
 import { toast } from "react-toastify";
 import PlusSvg  from '../../assets/plus-svgrepo.svg?react';
+import CloseSvg  from '../../assets/close-svgrepo.svg?react';
 
 export default function CreateProduct() {
     const navigate = useNavigate();
@@ -130,7 +131,7 @@ export default function CreateProduct() {
                                             </div>
                                             <button
                                                 type="button"
-                                                className="flex flex-row items-center justify-center px-3 py-1.5 text-xs font-medium text-primary border-primary rounded-md border-2 ring-2 hover:bg-primary hover:text-white transition-colors"
+                                                className="flex flex-row items-center justify-center px-3 py-1.5 text-xs font-medium text-primary border-[1px] border-primary rounded-md border-2 ring-2 hover:bg-primary hover:text-white transition-colors"
                                                 onClick={() => addToFieldArray({ id: rm.id, name: rm.name, quantity: 1 })}
                                             >
                                                 <PlusSvg className="h-6"/> <p>Adicionar</p>
@@ -151,32 +152,42 @@ export default function CreateProduct() {
                                 <p className="text-sm text-gray-600">Informe a quantidade utilizada de cada matéria prima.</p>
                                 <div className="space-y-2">
                                     {fields.map((field, index) => (
-                                        <div 
-                                            key={field.fieldId}
-                                            className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-colors"
-                                        >
-                                            <div className="flex-1 min-w-0">
-                                                <span className="text-sm font-medium text-gray-900">{field.name}</span>
+                                        <div key={field.fieldId} className="flex flex-col gap-x-2">
+                                            <div className="flex flex-col items-end gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-colors">
+                                                <div className="flex flex-row w-full items-center justify-between flex-1">
+                                                    <p className="text-md font-medium text-gray-900">{field.name}</p>
+                                                    <button 
+                                                        type="button" 
+                                                        className="!p-2 max-w-15 h-full text-red-600 hover:bg-red-50 rounded-md transition-colors w-full sm:w-auto"
+                                                        onClick={() => remove(index)}
+                                                        title="Remover"
+                                                    >
+                                                        <CloseSvg className="h-7"/>
+                                                    </button>
+                                                </div>
+
+                                                <div className="flex flex-col sm:flex-row items-end gap-2 w-full sm:w-auto">
+                                                    <div className="flex flex-col rounded border border-gray-300 bg-gray-50 px-2 sm:px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary focus-within:border-primary outline-none w-full sm:max-w-[120px] sm:min-w-[150px] gap-1 justify-center items-center">
+                                                        <input
+                                                            type="number"
+                                                            {...register(`rawMaterials.${index}.quantity` as const, { 
+                                                            valueAsNumber: true, 
+                                                            validate: (value) => value && value > 0 || "O valor deve ser maior que zero." 
+                                                            })}
+                                                            className="w-full text-center sm:text-left px-1 py-1 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-primary"
+                                                            placeholder="0"
+                                                        />
+                                                        <span className="text-xs text-gray-500 sm:w-full text-center sm:text-left">unidades</span>
+                                                    </div>
+                                                </div>                                                    
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="number"
-                                                    {...register(`rawMaterials.${index}.quantity` as const, { valueAsNumber: true })}
-                                                    className="w-24 rounded-md border border-gray-300 bg-gray-50 px-3 py-1.5 text-sm text-center focus:ring-2 focus:ring-primary focus:border-primary outline-none max-w-[100px] sm:min-w-37.5"
-                                                    placeholder="0"
-                                                />
-                                                <span className="text-xs text-gray-500 w-16">unidades</span>
+                                            <div>
+                                                {errors.rawMaterials?.[index]?.quantity && (
+                                                    <p className="mt-1 text-sm text-red-500">
+                                                        {errors.rawMaterials[index].quantity?.message}
+                                                    </p>
+                                                )}
                                             </div>
-                                            <button 
-                                                type="button" 
-                                                className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                                                onClick={() => remove(index)}
-                                                title="Remover"
-                                            >
-                                                <p className="text-xl">
-                                                    X
-                                                </p>
-                                            </button>
                                         </div>
                                     ))}
                                 </div>
