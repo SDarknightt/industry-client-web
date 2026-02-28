@@ -1,73 +1,86 @@
-# React + TypeScript + Vite
+# Gerenciador de Produção - Frontend Web React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend web desenvolvido em React para gerenciamento de produção industrial.
 
-Currently, two official plugins are available:
+## Funcionalidades
+- Visualização e gerenciamento de produtos;
+- Visualização e gerenciamento de matérias primas;
+- Associação entre produtos e matérias primas;
+- Interface responsiva e intuitiva;
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Stack
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router DOM
+- React Query
+- Axios
 
-## React Compiler
+## Como executar o projeto (localmente)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Pré-requisitos
+- Node.js 22+
+- pnpm (opcional, mas recomendado)
 
-## Expanding the ESLint configuration
+### Instalação
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Instale as dependências:
+```bash
+pnpm install
+# ou
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Executando
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Inicie o servidor de desenvolvimento:
+```bash
+pnpm dev
+# ou
+npm run dev
 ```
+
+A aplicação será iniciada em:
+```bash
+ http://localhost:5173
+```
+
+### Build para produção
+
+```bash
+pnpm build
+# ou
+npm run build
+```
+
+### Variáveis de ambiente (opcional)
+
+Por padrão, a API está configurada para `http://localhost:8080` em **src/service/api.ts**. 
+
+## Executando com Docker
+
+### Build da imagem
+
+Na raiz do projeto, execute:
+```bash
+docker build -t industry-client:1.0 .
+```
+
+### Executando o container
+
+Rode o container expondo na porta 80:
+```bash
+docker run -d --name industry-client -p 80:80 industry-client:1.0
+```
+
+A aplicação será iniciada em:
+```bash
+ http://localhost:80
+```
+
+## Melhorias Futuras
+- Autenticação e autorização via JWT;
+- Dark mode;
+- Dashboard com métricas de produção;
+- Relatórios e exportação de dados;
