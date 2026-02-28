@@ -7,15 +7,11 @@ import { TableComponent } from "../../components/table/TableComponent";
 export default function ProductDetails() {
     const { id } = useParams();
 
-    const { data: product, isLoading } = useQuery({
+    const { data: product } = useQuery({
         queryKey: ["getProductById", id],
         queryFn: () => getProductById(Number(id)),
         enabled: !!Number(id),
     });
-
-    if (isLoading) {
-        return <div className="p-4">Carregando...</div>;
-    }
 
     if (!product) {
         return <div className="p-4 text-red-500">Produto não encontrado.</div>;
@@ -34,7 +30,7 @@ export default function ProductDetails() {
                 </div>
 
                 <div>
-                    <p className="text-sm text-gray-500">Preço</p>
+                    <p className="text-sm text-gray-500">Valor Unitário</p>
                     <p className="text-lg font-semibold text-gray-900">
                         R$ {Number(product.price).toFixed(2)}
                     </p>

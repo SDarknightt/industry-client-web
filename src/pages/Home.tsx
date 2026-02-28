@@ -31,6 +31,7 @@ export default function Home() {
             </div>
 
             <TableComponent
+                onRowClick={(p) => navigate("/produtos/"+p.id)}
                 data={products ?? []}
                 columns={[
                     {
@@ -39,8 +40,7 @@ export default function Home() {
                     },
                     {
                         header: "Qtd. Produzível",
-                        objectMap: "maxProductionQuantity",
-                        reactNode: (p) => <span>{p?.maxProductionQuantity?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                        objectMap: "maxProductionQuantity"
                     },
                     {
                         header: "Valor Unit.",

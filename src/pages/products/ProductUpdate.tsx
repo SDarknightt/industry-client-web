@@ -9,6 +9,8 @@ import { createProductRawMaterialRelationship, deleteProductRawMaterialRelations
 import BackButton from "../../components/button/BackButtonComponent";
 import type { ProductUpdateType } from "../../types/ProductTypes";
 import { toast } from "react-toastify";
+import CloseSvg  from '../../assets/close-svgrepo.svg?react';
+import PlusSvg  from '../../assets/plus-svgrepo.svg?react';
 
 export default function ProductUpdate() {
     const navigate = useNavigate();
@@ -19,6 +21,7 @@ export default function ProductUpdate() {
     const { id } = useParams();
 
     const {
+        watch,
         reset,
         handleSubmit,
         register,
@@ -31,6 +34,9 @@ export default function ProductUpdate() {
             price: ""
         }
     });
+
+    const name = watch("name");
+    const price = watch("price");
 
     const { data: rawMaterials } = useQuery({
         queryKey: ['getRawMaterials'],
@@ -145,11 +151,11 @@ export default function ProductUpdate() {
                                 )}
                             </Field>
                             <Field>
-                                <Label className="">Preço</Label>
+                                <Label className="">Valor Unitário</Label>
                                 <Input 
                                     {...register("price", {
-                                        required: "O preço é obrigatório.",
-                                        validate: (value) => parseFloat(value) > 0 || "O preço deve ser maior que zero.",
+                                        required: "O valor é obrigatório.",
+                                        validate: (value) => parseFloat(value) > 0 || "O valor deve ser maior que zero.",
                                     })}
                                     className={"block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm"}
                                 />
@@ -198,7 +204,7 @@ export default function ProductUpdate() {
                                                                     setEditingQuantity(null);
                                                                 }
                                                             }}
-                                                            className="rounded-md border border-primary bg-blue-50 px-3 py-1.5 text-sm text-center focus:ring-2 focus:ring-primary focus:border-primary outline-none min-w-[150px]"
+                                                            className="rounded-md border border-primary bg-blue-50 px-3 py-1.5 text-sm text-center focus:ring-2 focus:ring-primary focus:border-primary outline-none max-w-[100px] sm:min-w-37.5"
                                                         />
                                                     </>
                                                 ) : (
@@ -220,9 +226,7 @@ export default function ProductUpdate() {
                                                 onClick={() => product?.id && removeFormulation({ productId: product.id, materialId: rm.id })}
                                                 title="Remover"
                                             >
-                                                <p className="text-xl">
-                                                    X
-                                                </p>
+                                                <CloseSvg className="h-7"/>
                                             </button>
                                         </div>
                                     ))}
@@ -263,7 +267,7 @@ export default function ProductUpdate() {
                                                 </div>
                                                 <button
                                                     type="button"
-                                                    className="ml-2 px-3 py-1.5 text-xs font-medium text-primary border-primary rounded-md border-2 ring-2 hover:bg-primary hover:text-white transition-colors"
+                                                    className="flex flex-row items-center justify-center px-3 py-1.5 text-xs font-medium text-primary border-primary rounded-md border-2 ring-2 hover:bg-primary hover:text-white transition-colors"
                                                     onClick={() => {
                                                         const quantity = prompt(`Informe a quantidade de "${rm.name}" para este produto:`);
                                                         if (quantity && Number(quantity) > 0 && product?.id && rm?.id) {
@@ -271,7 +275,7 @@ export default function ProductUpdate() {
                                                         }
                                                     }}
                                                 >
-                                                    + Adicionar
+                                                    <PlusSvg className="h-6"/> <p>Adicionar</p>
                                                 </button>
                                             </div>
                                         ))}
@@ -288,7 +292,8 @@ export default function ProductUpdate() {
 
                         <div className="flex flex-row justify-end">
                             <Button
-                                className="w-full max-w-50 bg-primary text-white hover:brightness-90"
+                                disabled={name?.trim() == product?.name && price?.trim() == product?.price?.toString()}
+                                className="w-full max-w-50 bg-primary text-white hover:brightness-90 disabled:bg-gray-400 disabled:brightness-100"
                                 type="submit"
                             >
                                 Salvar

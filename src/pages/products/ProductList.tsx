@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/button/BackButtonComponent";
 import { TableComponent } from "../../components/table/TableComponent";
 import { toast } from "react-toastify";
+import TrashSvg  from '../../assets/trash-svgrepo.svg?react';
+import PenSvg  from '../../assets/pen-svgrepo.svg?react';
+import PlusSvg  from '../../assets/plus-svgrepo.svg?react';
 
 export default function ListProduct() {
 
@@ -33,10 +36,10 @@ export default function ListProduct() {
 
             <div className="flex flex-row justify-end">
                 <Button 
-                    className="flex flex-row items-center justify-center text-center gap-x-2 font-bold w-full max-w-50 bg-primary text-white hover:brightness-90" 
+                    className="flex flex-row items-center justify-center text-center gap-x-1 font-bold w-full max-w-50 bg-primary text-white hover:brightness-90" 
                     onClick={() => navigate("/produtos/novo")}
                 >
-                    <span className="text-xl">+</span> Cadastrar
+                    <PlusSvg className="h-8 w-8"/> Cadastrar
                 </Button>
             </div>
 
@@ -49,22 +52,26 @@ export default function ListProduct() {
                         objectMap: "name"
                     },
                     {
-                        header: "Preço",
-                        objectMap: "price"
+                        header: "Valor Unit.",
+                        objectMap: "price",
+                        reactNode: (p) => <span>{p?.price?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                     },
                     {
                         header: "#",
                         objectMap: "#",
+                        disableClick: true,
                         reactNode: (p) => (
                             <ButtonOptions   
                                 buttons={[
                                     {
                                         title: "Editar",
-                                        onClick: () => navigate(`/produtos/${p.id}/editar`)
+                                        onClick: () => navigate(`/produtos/${p.id}/editar`),
+                                        icon: <PenSvg className="h-8 w-8 text-blue-500"/>
                                     },
                                     {
                                         title: "Deletar",
-                                        onClick: () => remove(p?.id)    
+                                        onClick: () => remove(p?.id),
+                                        icon: <TrashSvg className="h-8 w-8 text-red-500"/>
                                     }
                                 ]}
                             />

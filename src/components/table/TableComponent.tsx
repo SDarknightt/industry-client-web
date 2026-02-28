@@ -4,6 +4,7 @@ interface Column {
   header: string;
   objectMap: string;
   reactNode?: (row: any) => React.ReactNode;
+  disableClick?: boolean;
 }
 
 interface TableProps {
@@ -29,24 +30,34 @@ export function TableComponent({
                 ))}
                 </tr>
             </thead>
-
-            <tbody className="divide-y divide-gray-100 text-graphite">
-                {data.map((row, rowIndex) => (
-                    <tr key={(row as any)?.id || rowIndex}
-                        className="hover:bg-gray-50 border-y-2 border-[#E9ECE9] cursor-pointer"
-                        onClick={() => onRowClick?.(row)}
-                    >
-                        {columns.map((col, colIndex) => (
-                            <td
-                                key={colIndex}
-                                className={`p-4 text-sm text-gray-900`}
-                                onClick={(e) => col.reactNode && e.stopPropagation()}
-                            >
-                                {col.reactNode ? col.reactNode(row) : row[col.objectMap] ?? "-"}
-                            </td>
-                        ))}
+                
+            <tbody className="divide-y divide-gray-100 text-graphite font-semibold">
+                {data?.length == 0 ? (
+                    <tr>
+                        <td colSpan={columns.length}
+                            className="text-center p-6"
+                        >
+                            Nenhum dado encontrado
+                        </td>
                     </tr>
-                ))}
+                ) : (
+                    data.map((row, rowIndex) => (
+                        <tr key={(row as any)?.id || rowIndex}
+                            className="hover:bg-gray-100 border-y-2 border-[#E9ECE9] cursor-pointer"
+                            onClick={() => onRowClick?.(row)}
+                        >
+                            {columns.map((col, colIndex) => (
+                                <td
+                                    key={colIndex}
+                                    className={`p-4 text-sm text-gray-900`}
+                                    onClick={(e) => col.disableClick && e.stopPropagation()}
+                                >
+                                    {col.reactNode ? col.reactNode(row) : row[col.objectMap] ?? "-"}
+                                </td>
+                            ))}
+                        </tr>
+                    ))
+                )}
             </tbody>
         </table>
     </div>

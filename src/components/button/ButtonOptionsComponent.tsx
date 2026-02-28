@@ -12,14 +12,14 @@ export default function ButtonOptions({ title, buttons }: { title?: string; butt
             <MenuItems
                 transition
                 anchor="bottom end"
-                className="flex flex-col gap-y-2 w-52 bg-primary/75 backdrop-blur-2xl  origin-top-right rounded-xl border border-white/5  p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
+                className="flex flex-col text-sm font-semibold gap-y-2 w-52 bg-primary/75 backdrop-blur-2xl origin-top-right rounded-xl border border-white/5  p-1 text-white transition duration-100 ease-out [--anchor-gap:--spacing(1)] focus:outline-none data-closed:scale-95 data-closed:opacity-0"
             >
                 {(buttons ?? []).map((button) => (
                     <MenuItem key={button.title}>
                         <button
                             onClick={button.onClick} 
-                            className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
-                            {button.title}
+                            className="flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10">
+                            <span>{button?.icon}</span> {button.title}
                         </button>
                     </MenuItem>
                 ))}

@@ -11,10 +11,12 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <div className="flex flex-col min-h-screen min-w-screen">
+      <div className="flex flex-col min-h-screen bg-white">
         <Header/>
-        <div className="flex flex-auto flex-col bg-white text-gray-600 p-3">
-          <AppRoutes />
+        <div className="flex justify-center text-gray-600">
+          <div className="flex flex-y-auto flex-col w-full max-w-[1200px] p-3">
+            <AppRoutes />
+          </div>
         </div>
       </div>
       <ToastContainer

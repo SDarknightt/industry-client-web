@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/button/BackButtonComponent";
 import { TableComponent } from "../../components/table/TableComponent";
 import { toast } from "react-toastify";
+import TrashSvg  from '../../assets/trash-svgrepo.svg?react';
+import PenSvg  from '../../assets/pen-svgrepo.svg?react';
+import PlusSvg  from '../../assets/plus-svgrepo.svg?react';
 
 export default function RawMaterialList() {
     const navigate = useNavigate();
@@ -32,10 +35,10 @@ export default function RawMaterialList() {
 
             <div className="flex flex-row justify-end">
                 <Button 
-                    className="flex flex-row items-center justify-center text-center gap-x-2 font-bold w-full max-w-50 bg-primary text-white hover:brightness-90" 
+                    className="flex flex-row items-center justify-center text-center gap-x-1 font-bold w-full max-w-50 bg-primary text-white hover:brightness-90" 
                     onClick={() => navigate("/materias-primas/novo")}
                 >
-                    <span className="text-xl">+</span> Cadastrar
+                    <PlusSvg className="h-8 w-8"/> Cadastrar    
                 </Button>
             </div>
 
@@ -54,16 +57,19 @@ export default function RawMaterialList() {
                     {
                         header: "#",
                         objectMap: "#",
+                        disableClick: true,
                         reactNode: (m) => (
                             <ButtonOptions   
                                 buttons={[
                                     {
                                         title: "Editar",
-                                        onClick: () => navigate(`/materias-primas/${m.id}/editar`)
+                                        onClick: () => navigate(`/materias-primas/${m.id}/editar`),
+                                        icon: <PenSvg className="h-8 w-8 text-blue-500"/>
                                     },
                                     {
                                         title: "Deletar",
-                                        onClick: () => remove(m?.id)    
+                                        onClick: () => remove(m?.id),
+                                        icon: <TrashSvg className="h-8 w-8 text-red-500"/>
                                     }
                                 ]}
                             />

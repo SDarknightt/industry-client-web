@@ -14,6 +14,7 @@ export default function RawMaterialUpdate() {
     const { id } = useParams();
 
     const {
+        watch,
         reset,
         handleSubmit,
         register,
@@ -26,6 +27,9 @@ export default function RawMaterialUpdate() {
             stockQuantity: ""
         }
     });
+
+    const name = watch("name");
+    const stockQuantity = watch("stockQuantity");
 
     const { data: rawMaterial } = useQuery({
         queryKey: ['getRawMaterialById', id],
@@ -49,7 +53,7 @@ export default function RawMaterialUpdate() {
             reset({
                 id: rawMaterial?.id,
                 name: rawMaterial?.name,
-                stockQuantity: rawMaterial?.stockQuantity
+                stockQuantity: rawMaterial?.stockQuantity?.toString()
             });
         }
     }, [rawMaterial]);
@@ -100,6 +104,7 @@ export default function RawMaterialUpdate() {
                             <Button
                                 className="w-full max-w-50 bg-primary text-white hover:brightness-90"
                                 type="submit"
+                                disabled={name?.trim() == rawMaterial?.name && stockQuantity?.trim() == rawMaterial?.stockQuantity?.toString()}
                             >
                                 Salvar
                             </Button>

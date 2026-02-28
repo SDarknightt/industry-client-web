@@ -8,6 +8,7 @@ import { useState } from "react";
 import BackButton from "../../components/button/BackButtonComponent";
 import type { ProductCreateType, RawMaterialQuantity } from "../../types/ProductTypes";
 import { toast } from "react-toastify";
+import PlusSvg  from '../../assets/plus-svgrepo.svg?react';
 
 export default function CreateProduct() {
     const navigate = useNavigate();
@@ -89,11 +90,11 @@ export default function CreateProduct() {
                                 )}
                             </Field>
                             <Field>
-                                <Label className="">Preço</Label>
+                                <Label>Valor Unitário</Label>
                                 <Input 
                                     {...register("price", {
-                                        required: "O preço é obrigatório.",
-                                        validate: (value) => parseFloat(value) > 0 || "O preço deve ser maior que zero.",
+                                        required: "O valor é obrigatório.",
+                                        validate: (value) => parseFloat(value) > 0 || "O valor deve ser maior que zero.",
                                     })}
                                     className={"block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm"}
                                 />
@@ -129,10 +130,10 @@ export default function CreateProduct() {
                                             </div>
                                             <button
                                                 type="button"
-                                                className="ml-2 px-3 py-1.5 text-xs font-medium text-primary border-primary rounded-md border-2 ring-2 hover:bg-primary hover:text-white transition-colors"
+                                                className="flex flex-row items-center justify-center px-3 py-1.5 text-xs font-medium text-primary border-primary rounded-md border-2 ring-2 hover:bg-primary hover:text-white transition-colors"
                                                 onClick={() => addToFieldArray({ id: rm.id, name: rm.name, quantity: 1 })}
                                             >
-                                                + Adicionar
+                                                <PlusSvg className="h-6"/> <p>Adicionar</p>
                                             </button>
                                         </div>
                                     ))}
@@ -161,7 +162,7 @@ export default function CreateProduct() {
                                                 <input
                                                     type="number"
                                                     {...register(`rawMaterials.${index}.quantity` as const, { valueAsNumber: true })}
-                                                    className="w-24 rounded-md border border-gray-300 bg-gray-50 px-3 py-1.5 text-sm text-center focus:ring-2 focus:ring-primary focus:border-primary outline-none min-w-[150px]"
+                                                    className="w-24 rounded-md border border-gray-300 bg-gray-50 px-3 py-1.5 text-sm text-center focus:ring-2 focus:ring-primary focus:border-primary outline-none max-w-[100px] sm:min-w-37.5"
                                                     placeholder="0"
                                                 />
                                                 <span className="text-xs text-gray-500 w-16">unidades</span>
