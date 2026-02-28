@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { getProductById, updateProduct } from "../../service/product-service";
-import { Fieldset, Field, Label, Input, Button } from "@headlessui/react";
+import { Fieldset, Field, Label, Input, Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { getRawMaterials } from "../../service/raw-material-service";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -17,6 +17,9 @@ export default function ProductUpdate() {
     const queryClient = useQueryClient();
     const [searchTerm, setSearchTerm] = useState("");
     const [editingQuantity, setEditingQuantity] = useState<{ materialId: number; quantity: number } | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedMaterial, setSelectedMaterial] = useState<{ id: number; name: string } | null>(null);
+    const [modalQuantity, setModalQuantity] = useState("");
 
     const { id } = useParams();
 
@@ -175,59 +178,62 @@ export default function ProductUpdate() {
                             {(product?.rawMaterials ?? []).length > 0 ? (
                                 <div className="flex flex-col gap-y-2">
                                     {product?.rawMaterials.map((rm) => (
-                                        <div 
-                                            key={rm.id}
-                                            className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-colors"
-                                        >
-                                            <div className="flex-1 min-w-0">
-                                                <span className="text-sm font-medium text-gray-900">{rm.name}</span>
+                                        <div key={rm.id} className="flex flex-col gap-x-2">
+                                            <div className="flex flex-col items-end gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-colors">
+                                                <div className="flex flex-row w-full items-center justify-between flex-1">
+                                                    <p className="text-md font-medium text-gray-900">{rm.name}</p>
+                                                    <button 
+                                                        type="button" 
+                                                        className="!p-2 max-w-15 h-full text-red-600 hover:bg-red-50 rounded-md transition-colors w-full sm:w-auto"
+                                                        onClick={() => product?.id && removeFormulation({ productId: product.id, materialId: rm.id })}
+                                                        title="Remover"
+                                                    >
+                                                        <CloseSvg className="h-7"/>
+                                                    </button>
+                                                </div>
+
+                                                <div className="flex flex-col sm:flex-row items-end w-full sm:w-auto">
+                                                    <div className="flex flex-col rounded border border-gray-300 bg-gray-50 px-2 sm:px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary focus-within:border-primary outline-none w-full sm:max-w-[120px] sm:min-w-[150px] gap-1 justify-center items-center">
+                                                        {editingQuantity && editingQuantity.materialId === rm.id ? (
+                                                            <>
+                                                                <input
+                                                                    type="number"                                                                
+                                                                    className="w-full text-center sm:text-left px-1 py-1 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-primary"
+                                                                    defaultValue={editingQuantity.quantity}
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === 'Enter') {
+                                                                            const value = Number((e.target as HTMLInputElement).value);
+                                                                            if (value > 0) {
+                                                                                saveQuantity(rm.id, value);
+                                                                            }
+                                                                        }
+                                                                    }}
+                                                                    onBlur={(e) => {
+                                                                        const value = Number(e.target.value);
+                                                                        if (value > 0) {
+                                                                            saveQuantity(rm.id, value);
+                                                                        } else {
+                                                                            setEditingQuantity(null);
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <span className="text-xs text-gray-500 sm:w-full text-center sm:text-left">unidades</span>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => setEditingQuantity({ materialId: rm.id, quantity: rm.materialQuantity })}
+                                                                    className="flex items-center gap-1 h-full text-sm rounded-md transition-colors w-full"
+                                                                >
+                                                                    <span className="font-medium">{rm.materialQuantity}</span>
+                                                                    <span className="text-xs text-gray-500">unidades</span>
+                                                                </button>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </div>                                                    
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                {editingQuantity && editingQuantity.materialId === rm.id ? (
-                                                    <>
-                                                        <input
-                                                            type="number"
-                                                            defaultValue={editingQuantity.quantity}
-                                                            onKeyDown={(e) => {
-                                                                if (e.key === 'Enter') {
-                                                                    const value = Number((e.target as HTMLInputElement).value);
-                                                                    if (value > 0) {
-                                                                        saveQuantity(rm.id, value);
-                                                                    }
-                                                                }
-                                                            }}
-                                                            onBlur={(e) => {
-                                                                const value = Number(e.target.value);
-                                                                if (value > 0) {
-                                                                    saveQuantity(rm.id, value);
-                                                                } else {
-                                                                    setEditingQuantity(null);
-                                                                }
-                                                            }}
-                                                            className="rounded-md border border-primary bg-blue-50 px-3 py-1.5 text-sm text-center focus:ring-2 focus:ring-primary focus:border-primary outline-none max-w-[100px] sm:min-w-37.5"
-                                                        />
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => setEditingQuantity({ materialId: rm.id, quantity: rm.materialQuantity })}
-                                                            className="flex items-center gap-1 px-3 py-1 text-sm text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors min-w-[150px]"
-                                                        >
-                                                            <span className="font-medium">{rm.materialQuantity}</span>
-                                                            <span className="text-xs text-gray-500">unidades</span>
-                                                        </button>
-                                                    </>
-                                                )}
-                                            </div>
-                                            <button 
-                                                type="button" 
-                                                className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                                                onClick={() => product?.id && removeFormulation({ productId: product.id, materialId: rm.id })}
-                                                title="Remover"
-                                            >
-                                                <CloseSvg className="h-7"/>
-                                            </button>
                                         </div>
                                     ))}
                                 </div>
@@ -269,10 +275,9 @@ export default function ProductUpdate() {
                                                     type="button"
                                                     className="flex flex-row items-center justify-center px-3 py-1.5 text-xs font-medium text-primary border-primary rounded-md border-2 ring-2 hover:bg-primary hover:text-white transition-colors"
                                                     onClick={() => {
-                                                        const quantity = prompt(`Informe a quantidade de "${rm.name}" para este produto:`);
-                                                        if (quantity && Number(quantity) > 0 && product?.id && rm?.id) {
-                                                            saveFormulation({ productId: product.id, materialId: rm.id, materialQuantity: Number(quantity) });
-                                                        }
+                                                        setSelectedMaterial({ id: rm.id, name: rm.name });
+                                                        setModalQuantity("");
+                                                        setIsModalOpen(true);
                                                     }}
                                                 >
                                                     <PlusSvg className="h-6"/> <p>Adicionar</p>
@@ -299,6 +304,53 @@ export default function ProductUpdate() {
                                 Salvar
                             </Button>
                         </div>
+
+                        <Dialog open={isModalOpen} as="div" className="relative z-50 focus:outline-none" onClose={() => setIsModalOpen(false)}>
+                            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+                                <div className="flex min-h-full items-center justify-center p-4">
+                                    <DialogPanel className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+                                        <DialogTitle as="h3" className="text-lg font-medium text-gray-900">
+                                            Adicionar Matéria-Prima
+                                        </DialogTitle>
+                                        
+                                        <div className="flex flex-col mt-4 gap-y-4">
+                                            <p className="text-sm text-gray-600">
+                                                Informe a quantidade de <span className="font-medium">{selectedMaterial?.name}</span> para este produto:
+                                            </p>
+                                            
+                                            <Input
+                                                type="number"
+                                                value={modalQuantity}
+                                                onChange={(e) => setModalQuantity(e.target.value)}
+                                                placeholder="Quantidade"
+                                                className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm"
+                                                autoFocus
+                                            />
+
+                                            <div className="flex flex-row gap-3 justify-end mt-2">
+                                                <Button
+                                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+                                                    onClick={() => setIsModalOpen(false)}
+                                                >
+                                                    Cancelar
+                                                </Button>
+                                                <Button
+                                                    className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:brightness-90"
+                                                    onClick={() => {
+                                                        if (modalQuantity && Number(modalQuantity) > 0 && product?.id && selectedMaterial?.id) {
+                                                            saveFormulation({ productId: product.id, materialId: selectedMaterial.id, materialQuantity: Number(modalQuantity) });
+                                                            setIsModalOpen(false);
+                                                        }
+                                                    }}
+                                                >
+                                                    Adicionar
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </DialogPanel>
+                                </div>
+                            </div>
+                        </Dialog>
                     </div>
                 </form>
             </div>
